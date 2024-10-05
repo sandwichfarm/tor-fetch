@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import torFetch, { TorControlPort, renewTorSession } from './index';
+import { TorControlPort, renewTorSession, torfetch } from './index';
 import { SocksProxyAgent } from 'socks-proxy-agent';
 import axios from 'axios';
 import net from 'net';
@@ -17,12 +17,12 @@ const mockAxiosResponse = (data: any, status = 200) => {
   });
 };
 
-describe('torFetch', () => {
-  it('should make a GET request using torFetch.get', async () => {
+describe('torfetch', () => {
+  it('should make a GET request using torfetch.get', async () => {
     const mockResponseData = 'mock data';
     mockAxiosResponse(mockResponseData);
 
-    const response = await torFetch.get(dummyURL);
+    const response = await torfetch.get(dummyURL);
     expect(response.status).toBe(200);
     expect(response.statusText).toBe('OK');
     expect(await response.text()).toBe(mockResponseData);
@@ -37,7 +37,7 @@ describe('torFetch', () => {
     const error = new Error('ECONNREFUSED');
     (axios as any).mockRejectedValue(error);
     try {
-      await torFetch(dummyURL);
+      await torfetch(dummyURL);
     } catch (err: any) {
       expect(err.message).toContain('Are you running `tor`?');
     }
