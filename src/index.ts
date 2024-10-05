@@ -1,19 +1,20 @@
 import SocksProxyAgent from 'socks-proxy-agent';
+
 import axios from 'axios';
 import crossFetch, { Request, Response } from 'cross-fetch';
-import type { Agent } from 'http';
 
-let net: typeof import('net') | undefined;
-let os: typeof import('os') | undefined;
-let fs: typeof import('fs') | undefined;
-let path: typeof import('path') | undefined;
+let net: typeof import('net');
+let os: typeof import('os');
+let fs: typeof import('fs');
+let path: typeof import('path');
 
-// Conditionally import Node.js-specific modules if running in a Node.js environment
 if (typeof window === 'undefined') {
-  net = require('net');
-  os = require('os');
-  fs = require('fs');
-  path = require('path');
+  (async () => {
+    net = await import('net');
+    os = await import('os');
+    fs = await import('fs');
+    path = await import('path');
+  })();
 }
 
 interface ProxySettings {
@@ -22,21 +23,13 @@ interface ProxySettings {
   type: number;
 }
 
-let _defaultProxySettings: ProxySettings = createProxySettings('localhost', 9050);
+let _defaultProxySettings: ProxySettings = { ipaddress: '127.0.0.1', port: 9050, type: 5 };
 
-/**
- * Creates proxy settings for Tor.
- * @param ipaddress - The IP address of the Tor proxy.
- * @param port - The port of the Tor proxy.
- * @param type - The type of the proxy (e.g., 4 or 5).
- * @returns The proxy settings object.
- */
 const createProxySettings = (ipaddress?: string, port?: number, type?: number): ProxySettings => {
-  const dps = _defaultProxySettings || {};
   const proxySetup: ProxySettings = {
-    ipaddress: ipaddress || dps.ipaddress || '127.0.0.1',
-    port: port || dps.port || 9050,
-    type: type || dps.type || 5,
+    ipaddress: ipaddress || _defaultProxySettings.ipaddress || '127.0.0.1',
+    port: port || _defaultProxySettings.port || 9050,
+    type: type || _defaultProxySettings.type || 5,
   };
 
   if (proxySetup.ipaddress === 'localhost') {
@@ -46,10 +39,8 @@ const createProxySettings = (ipaddress?: string, port?: number, type?: number): 
   return proxySetup;
 };
 
-/**
- * Attaches common error details for Tor-related errors.
- * @param err - The error object to attach details to.
- */
+_defaultProxySettings = createProxySettings('localhost', 9050);
+
 const attachCommonErrorDetails = (err: Error | null) => {
   if (!err || typeof err.message !== 'string') return;
 
@@ -59,7 +50,7 @@ const attachCommonErrorDetails = (err: Error | null) => {
 
  - Are you running \`tor\`?
 See easy guide here (OSX, Linux, Windows):
-https://github.com/talmobi/tor-request#requirements
+https:
 
  Quickfixes:
   OSX: \`brew install tor && tor\`         # installs and runs tor
@@ -84,7 +75,7 @@ const attachCommonControlPortErrorDetails = (err: Error | null) => {
     const attachment = ` - Have you enabled the ControlPort in your \`torrc\` file? (${getTorrcLocation()})
 
 See easy guide here (OSX, Linux, Windows):
-https://github.com/talmobi/tor-request#optional-configuring-tor-enabling-the-controlport
+https:
 
  Sample torrc file:
      ControlPort 9051
@@ -143,7 +134,7 @@ const getTorrcLocation = (): string => {
  * @param url - The URL for which to create the agent.
  * @returns The SOCKS proxy agent.
  */
-const createAgent = (url: string): Agent => {
+const createAgent = (url: string): any => {
   const ps = createProxySettings();
 
   let protocol = 'socks://';
@@ -156,7 +147,7 @@ const createAgent = (url: string): Agent => {
   }
 
   const proxyUri = `${protocol}${ps.ipaddress}:${ps.port}`;
-  return new SocksProxyAgent(proxyUri) as Agent;
+  return new (SocksProxyAgent as any)(proxyUri);
 };
 
 /**
@@ -172,9 +163,15 @@ const torFetch = async (input: Request | string, init?: RequestInit): Promise<Re
   const params = {
     url,
     method: init?.method || 'GET',
-    headers: init?.headers,
+    headers: init?.headers ? (() => {
+      const headersObj: Record<string, string> = {};
+      new Headers(init.headers).forEach((value, key) => {
+        headersObj[key] = value;
+      });
+      return headersObj;
+    })() : undefined,
     data: init?.body,
-    signal: init?.signal,
+    signal: init?.signal ?? undefined,
     httpAgent: createAgent(url),
   };
 
@@ -240,13 +237,13 @@ const TorControlPort: TorControlPortType = {
       socket.write(commandString);
     });
 
-    socket.on('error', (err) => {
+    socket.on('error', (err: any) => {
       attachCommonControlPortErrorDetails(err);
       done(err || new Error('ControlPort communication error'));
     });
 
     let data = '';
-    socket.on('data', (chunk) => {
+    socket.on('data', (chunk: any) => {
       data += chunk.toString();
     });
 
@@ -276,7 +273,7 @@ const renewTorSession = (done: (err: Error | null, message?: string) => void) =>
     }
 
     const lines = data?.split(os?.EOL || '\n').slice(0, -1);
-    const success = lines.every((val) => val.length <= 0 || val.includes('250'));
+    const success = lines?.every((val) => val.length <= 0 || val.includes('250')) ?? false;
 
     if (!success) {
       const comerr = new Error(`Error communicating with Tor ControlPort\n${data}`);

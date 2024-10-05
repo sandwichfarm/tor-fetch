@@ -3,9 +3,23 @@
   "version": "0.1.0",
   "type": "module",
   "description": "TorFetch: Fetch API over the Tor network.",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.esm.js",
-  "types": "dist/index.d.ts",
+  
+  "main": "dist/server/index.cjs.js",
+  "module": "dist/server/index.js",
+  "types": "dist/server/types/index.d.ts",
+  
+  "exports": {
+    ".": {
+      "import": "./dist/server/index.js",
+      "require": "./dist/server/index.cjs.js",
+      "types": "./dist/server/types/index.d.ts"
+    },
+    "./web": {
+      "import": "./dist/web/index.esm.js",
+      "types": "./dist/web/index.d.ts"
+    }
+  },
+
   "files": [
     "dist"
   ],
@@ -18,8 +32,8 @@
     "privacy"
   ],
   "scripts": {
-    "prepare": "rollup -c",
-    "build": "rollup -c",
+    "prepare": "rollup -c && tsc-alias -p tsconfig.server.json",
+    "build": "rollup -c && tsc-alias -p tsconfig.server.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Your Name <you@example.com>",
@@ -30,11 +44,14 @@
     "socks-proxy-agent": "^7.0.0"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^24.0.1",
-    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-commonjs": "28.0.0",
+    "@rollup/plugin-json": "6.1.0",
+    "@rollup/plugin-node-resolve": "15.3.0",
     "@rollup/plugin-typescript": "^11.0.0",
     "rollup": "^3.0.0",
-    "rollup-plugin-polyfill-node": "^0.13.0",
+    "rollup-plugin-polyfill-node": "0.13.0",
+    "rollup-plugin-terser": "7.0.2",
+    "tsc-alias": "1.8.10",
     "tslib": "2.7.0",
     "typescript": "^5.0.0"
   }
