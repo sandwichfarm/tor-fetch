@@ -1,4 +1,5 @@
-import SocksProxyAgent from 'socks-proxy-agent';
+import SocksProxyAgentModule from 'socks-proxy-agent';
+const { SocksProxyAgent } = SocksProxyAgentModule;
 
 import axios from 'axios';
 import crossFetch, { Request, Response } from 'cross-fetch';
@@ -17,7 +18,7 @@ if (typeof window === 'undefined') {
   })();
 }
 
-interface ProxySettings {
+export interface ProxySettings {
   ipaddress: string;
   port: number;
   type: number;
@@ -25,7 +26,7 @@ interface ProxySettings {
 
 let _defaultProxySettings: ProxySettings = { ipaddress: '127.0.0.1', port: 9050, type: 5 };
 
-const createProxySettings = (ipaddress?: string, port?: number, type?: number): ProxySettings => {
+export const createProxySettings = (ipaddress?: string, port?: number, type?: number): ProxySettings => {
   const proxySetup: ProxySettings = {
     ipaddress: ipaddress || _defaultProxySettings.ipaddress || '127.0.0.1',
     port: port || _defaultProxySettings.port || 9050,
@@ -147,7 +148,7 @@ const createAgent = (url: string): any => {
   }
 
   const proxyUri = `${protocol}${ps.ipaddress}:${ps.port}`;
-  return new (SocksProxyAgent as any)(proxyUri);
+  return new SocksProxyAgent(proxyUri);
 };
 
 /**
@@ -156,7 +157,7 @@ const createAgent = (url: string): any => {
  * @param init - The request initialization options.
  * @returns A Promise that resolves to a Response object.
  */
-const torFetch = async (input: Request | string, init?: RequestInit): Promise<Response> => {
+export const torFetch = async (input: Request | string, init?: RequestInit): Promise<Response> => {
   const { signal } = init || {};
   const url = typeof input === 'string' ? input : input.url;
 
@@ -213,7 +214,7 @@ interface TorControlPortType {
   send: (commands: string[], done: (err: Error | null, data?: string) => void) => void;
 }
 
-const TorControlPort: TorControlPortType = {
+export const TorControlPort: TorControlPortType = {
   password: '',
   host: 'localhost',
   port: 9051,
@@ -257,7 +258,7 @@ const TorControlPort: TorControlPortType = {
  * Renews the Tor session by sending a newnym signal to the ControlPort.
  * @param done - The callback function.
  */
-const renewTorSession = (done: (err: Error | null, message?: string) => void) => {
+export const renewTorSession = (done: (err: Error | null, message?: string) => void) => {
   const password = TorControlPort.password || '';
   const commands = [
     `authenticate "${password}"`,
