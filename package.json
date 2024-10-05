@@ -1,0 +1,40 @@
+{
+  "name": "@sandwichfarm/torfetch",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "TorFetch: Fetch API over the Tor network.",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "tor",
+    "fetch",
+    "socks",
+    "proxy",
+    "network",
+    "privacy"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Your Name <you@example.com>",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "1.7.7",
+    "cross-fetch": "^3.1.5",
+    "socks-proxy-agent": "^7.0.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "rollup": "^3.0.0",
+    "rollup-plugin-polyfill-node": "^0.13.0",
+    "typescript": "^5.0.0"
+  }
+}
