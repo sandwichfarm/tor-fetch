@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "type": "module",
   "description": "TorFetch: Fetch API over the Tor network.",
-
   "exports": {
     ".": {
       "require": "./dist/server/index.cjs.js",
@@ -12,7 +11,6 @@
       "types": "./dist/server/types/index.d.ts"
     }
   },
-
   "files": [
     "dist"
   ],
