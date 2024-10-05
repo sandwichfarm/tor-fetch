@@ -3,20 +3,18 @@
   "version": "0.1.0",
   "type": "module",
   "description": "TorFetch: Fetch API over the Tor network.",
+  
   "main": "dist/server/index.cjs.js",
   "module": "dist/server/index.js",
   "types": "dist/server/types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/server/index.js",
       "require": "./dist/server/index.cjs.js",
-      "types": "./dist/server/types/index.d.ts"
-    },
-    "./web": {
-      "import": "./dist/web/index.esm.js",
-      "types": "./dist/web/index.d.ts"
+      "import": "./dist/server/index.js",
+      "default": "./dist/server/index.js"
     }
   },
+
   "files": [
     "dist"
   ],
