@@ -22,7 +22,7 @@ export default [
     },
     plugins: [
       resolve({
-        extensions: ['.js'],
+        extensions: ['.js', '.ts'],
         preferBuiltins: true,
       }),
       commonjs({
