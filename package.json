@@ -6,7 +6,6 @@
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
-
   "files": [
     "dist"
   ],
@@ -36,6 +35,7 @@
     "@rollup/plugin-typescript": "^11.0.0",
     "rollup": "^3.0.0",
     "rollup-plugin-polyfill-node": "^0.13.0",
+    "tslib": "2.7.0",
     "typescript": "^5.0.0"
   }
 }
