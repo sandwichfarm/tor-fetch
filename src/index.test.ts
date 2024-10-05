@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import torFetch, { TorControlPort, renewTorSession } from './index';
-import SocksProxyAgent from 'socks-proxy-agent';
+import { SocksProxyAgent } from 'socks-proxy-agent';
 import axios from 'axios';
 import net from 'net';
 
@@ -9,7 +9,6 @@ vi.mock('net');
 
 const dummyURL = 'http://example.com';
 
-// Helper to mock axios response
 const mockAxiosResponse = (data: any, status = 200) => {
   (axios as any).mockResolvedValue({
     data,

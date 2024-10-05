@@ -17,5 +17,5 @@
     "baseUrl": ".", 
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "tests", "./adapters"]
+  "exclude": ["node_modules", "dist", "**/*.test.ts"]
 }
