@@ -6,7 +6,7 @@
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
-  
+
   "files": [
     "dist"
   ],
@@ -19,6 +19,7 @@
     "privacy"
   ],
   "scripts": {
+    "prepare": "rollup -c",
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
