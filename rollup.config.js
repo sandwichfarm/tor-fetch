@@ -18,7 +18,7 @@ export default [
       sourcemap: true,
       entryFileNames: '[name].js',
       strict: false,
-      exports: 'auto',
+      exports: 'named',
     },
     plugins: [
       resolve({
@@ -45,7 +45,7 @@ export default [
       sourcemap: true,
       entryFileNames: '[name].cjs.js',
       strict: false,
-      exports: 'auto',
+      exports: 'named',
     },
     plugins: [
       resolve({
@@ -72,7 +72,7 @@ export default [
       format: 'es',
       sourcemap: true,
       strict: false,
-      exports: 'auto',
+      exports: 'named',
     },
     plugins: [
       resolve({

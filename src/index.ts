@@ -86,8 +86,8 @@ https:
      \`tor --hash-password my_secret_password\`
 
    Tell tor-request the password to use:
-     \`import torFetch from "tor-request";
-      torFetch.TorControlPort.password = "my_secret_password";\`
+     \`import torfetch from "tor-request";
+      torfetch.TorControlPort.password = "my_secret_password";\`
 `;
     if (!err.message.includes(attachment)) {
       err.message += attachment;
@@ -157,7 +157,7 @@ const createAgent = (url: string): any => {
  * @param init - The request initialization options.
  * @returns A Promise that resolves to a Response object.
  */
-export const torFetch = async (input: Request | string, init?: RequestInit): Promise<Response> => {
+export const torfetch = async (input: Request | string, init?: RequestInit): Promise<Response> => {
   const { signal } = init || {};
   const url = typeof input === 'string' ? input : input.url;
 
@@ -196,16 +196,16 @@ export const torFetch = async (input: Request | string, init?: RequestInit): Pro
 const verbFunc = (verb: string) => {
   const method = verb === 'del' ? 'DELETE' : verb.toUpperCase();
   return async (uri: string, options?: RequestInit) => {
-    return torFetch(uri, { ...options, method });
+    return torfetch(uri, { ...options, method });
   };
 };
 
-torFetch.get = verbFunc('get');
-torFetch.head = verbFunc('head');
-torFetch.post = verbFunc('post');
-torFetch.put = verbFunc('put');
-torFetch.patch = verbFunc('patch');
-torFetch.del = verbFunc('del');
+torfetch.get = verbFunc('get');
+torfetch.head = verbFunc('head');
+torfetch.post = verbFunc('post');
+torfetch.put = verbFunc('put');
+torfetch.patch = verbFunc('patch');
+torfetch.del = verbFunc('del');
 
 interface TorControlPortType {
   password: string;
@@ -285,6 +285,4 @@ export const renewTorSession = (done: (err: Error | null, message?: string) => v
 
     done(null, 'Tor session successfully renewed!!');
   });
-};
-
-export default torFetch;
+};  
