@@ -28,7 +28,7 @@ export default [
       }),
       commonjs({
         sourceMap: true,
-        requireReturnsDefault: 'preferred', // Fix for default export issue in CommonJS modules
+        requireReturnsDefault: 'preferred',
       }),
       json({
         sourceMap: true,
@@ -36,7 +36,6 @@ export default [
       typescript({
         tsconfig: 'tsconfig.server.json',
       }),
-      terser(),
     ],
     onwarn
   },
@@ -50,7 +49,7 @@ export default [
       strict: false,
       exports: 'auto',
     },
-    treeshake: true,
+    treeshake: false,
     plugins: [
       resolve({
         extensions: ['.js', '.ts'],
@@ -58,7 +57,7 @@ export default [
       }),
       commonjs({
         sourceMap: true,
-        requireReturnsDefault: 'preferred', // Fix for default export issue in CommonJS modules
+        requireReturnsDefault: 'preferred',
       }),
       json({
         sourceMap: true,
@@ -66,7 +65,7 @@ export default [
       typescript({
         tsconfig: 'tsconfig.server.json',
       }),
-      terser(),
+      // terser(),
     ],
     onwarn
   },
